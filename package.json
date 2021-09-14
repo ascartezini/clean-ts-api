@@ -1,0 +1,34 @@
+{
+  "name": "clean-ts-api",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "build:clean": "tsc --build --clean",
+    "debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/index.js",
+    "test": "jest",
+    "test:watch": "jest --watchAll --coverage --colors",
+    "test:coverage": "jest --coverage --colors"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "class-validator": "^0.13.1",
+    "event-dispatch": "^0.4.1",
+    "module-alias": "^2.2.2",
+    "nodemon": "^2.0.12",
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.6.0"
+  },
+  "_moduleAliases": {
+    "@": "dist"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.1",
+    "jest": "^27.2.0",
+    "jest-mock-extended": "^2.0.2-beta2",
+    "serverless": "^2.57.0",
+    "ts-jest": "^27.0.5"
+  }
+}

@@ -1,0 +1,33 @@
+service: clean-ts-api
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+
+functions:    
+  get_groups:
+    handler: dist/application/handlers/GetGroupHandler.handler
+    description: function description
+    runtime: nodejs14.x
+    memorySize: 128
+    timeout: 3
+    events:
+      - http:
+          path: /groups/{groupId}
+          method: get
+          cors: true          
+  addUserToGroup:
+    handler: dist/application/handlers/AddUserToGroup.handler
+    description: function description
+    runtime: nodejs14.x
+    memorySize: 128
+    timeout: 3
+    events:
+      - http:
+          path: /groups/{groupId}/user/{userId}
+          method: post
+          cors: true          
+    
+      
