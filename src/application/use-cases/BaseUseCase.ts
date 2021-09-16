@@ -1,16 +1,15 @@
 import { DomainEvent } from "@/domain/domain-events/DomainEvent";
-import { EventDispatcher } from "event-dispatch";
+import { IEventDispatcher } from "@/infra/event-dispatcher/IEventDispatcher";
 import "../domain-event-listeners/index"; // necessary to register all event listeners
-import { UseCaseResponse } from "../dto/UseCaseResponse";
+import { UseCaseResponse } from "./dto/UseCaseResponse";
 
-export abstract class BaseUseCase<T> implements IUseCase<T> {
-    private eventDispatcher = new EventDispatcher();
-    requestData: Partial<T> = {};
-    isCreation: boolean;
+export abstract class BaseUseCase<T> {    
 
-    constructor(isCreation: boolean) {
-        this.isCreation = isCreation;
+    constructor(private eventDispatcher: IEventDispatcher, public isCreation: boolean) {
+
     }
+
+    abstract createRequest(): T;
 
     protected abstract innerHandler(data: any): Promise<UseCaseResponse>;
 
@@ -24,8 +23,4 @@ export abstract class BaseUseCase<T> implements IUseCase<T> {
 
         return response.content;
     }
-}
-
-interface IUseCase<T> {
-    handle(data: T): Promise<any>;
 }

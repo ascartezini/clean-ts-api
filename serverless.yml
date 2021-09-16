@@ -8,7 +8,7 @@ provider:
 
 functions:    
   get_groups:
-    handler: dist/application/handlers/GetGroupHandler.handler
+    handler: dist/src/handlers/GetGroupHandler.handler
     description: function description
     runtime: nodejs14.x
     memorySize: 128
@@ -19,7 +19,7 @@ functions:
           method: get
           cors: true          
   addUserToGroup:
-    handler: dist/application/handlers/AddUserToGroup.handler
+    handler: dist/src/handlers/AddUserToGroup.handler
     description: function description
     runtime: nodejs14.x
     memorySize: 128
@@ -30,4 +30,5 @@ functions:
           method: post
           cors: true          
     
-      
+plugins:
+  - serverless-jetpack

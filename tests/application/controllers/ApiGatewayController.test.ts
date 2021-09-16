@@ -2,7 +2,9 @@ import { ApiGatewayController } from "@/application/controllers/ApiGatewayContro
 import { HttpController } from "@/application/controllers/HttpController"
 import { HttpRequest } from "@/application/protocols/https";
 import { BaseUseCase } from "@/application/use-cases/BaseUseCase";
-import { UseCaseResponse } from "@/application/dto/UseCaseResponse";
+import { UseCaseResponse } from "@/application/use-cases/dto/UseCaseResponse";
+import { mock } from "jest-mock-extended";
+import { IEventDispatcher } from "@/infra/event-dispatcher/IEventDispatcher";
 
 class HttpControllerStub extends HttpController {
     adaptHttpRequest(): HttpRequest {
@@ -17,10 +19,15 @@ class RequestData {
 }
 
 class UseCaseStub extends BaseUseCase<RequestData> {
+    createRequest(): RequestData {
+        return new RequestData();
+    }
     protected async innerHandler(data: any): Promise<UseCaseResponse> {
         return new UseCaseResponse(null, null);
     }
 }
+
+const mockEventDispatcher = mock<IEventDispatcher>();
 
 describe('ApiGatewayController', () => {
     describe('getRequestData()', () => {
@@ -29,7 +36,7 @@ describe('ApiGatewayController', () => {
                 pathParameters: { groupId: "1", userId: "2" },
             };
 
-            const sut = new ApiGatewayController(new UseCaseStub(false));
+            const sut = new ApiGatewayController(new UseCaseStub(mockEventDispatcher, false));
             await sut.handleRequest(event, null);
             const reqData = sut.adaptHttpRequest();
 
@@ -48,7 +55,7 @@ describe('ApiGatewayController', () => {
             const event = {
                 queryStringParameters: { groupId: "1", userId: "2" },
             };
-            const sut = new ApiGatewayController(new UseCaseStub(false));
+            const sut = new ApiGatewayController(new UseCaseStub(mockEventDispatcher, false));
             await sut.handleRequest(event, null);
             const reqData = sut.adaptHttpRequest();
 
@@ -67,7 +74,7 @@ describe('ApiGatewayController', () => {
             const event = {
                 body: "{\"groupId\":1,\"userId\":2}"
             };
-            const sut = new ApiGatewayController(new UseCaseStub(false));
+            const sut = new ApiGatewayController(new UseCaseStub(mockEventDispatcher, false));
             await sut.handleRequest(event, null);
             const reqData = sut.adaptHttpRequest();
 
@@ -87,7 +94,7 @@ describe('ApiGatewayController', () => {
                 pathParameters: { groupId: '1' },
                 body: "{\"name\":\"group#1\"}"
             };
-            const sut = new ApiGatewayController(new UseCaseStub(false));
+            const sut = new ApiGatewayController(new UseCaseStub(mockEventDispatcher, false));
             await sut.handleRequest(event, null);
             const reqData = sut.adaptHttpRequest();
 

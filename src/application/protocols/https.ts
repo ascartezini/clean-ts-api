@@ -8,5 +8,5 @@ export type HttpRequest = {
     headers?: Map<string, string>;
     pathParameters?: any,
     queryStringParameters?: any,
-    body?: any;
+    body?: any;    
 }

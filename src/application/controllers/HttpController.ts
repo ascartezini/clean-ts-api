@@ -9,16 +9,16 @@ import { BaseUseCase } from '../use-cases/BaseUseCase';
 export abstract class HttpController {
 
     abstract adaptHttpRequest(): HttpRequest;
-    
+
     constructor(private useCase: BaseUseCase<any>) {
 
     }
 
     async handle(): Promise<HttpResponse> {
-        // const useCase: BaseUseCase<any> = dependencyContainer.resolve(useCaseType);
         const httpRequest = this.adaptHttpRequest();
         const { headers, pathParameters, queryStringParameters, body } = httpRequest;
-        let requestData = Object.assign(this.useCase.requestData, pathParameters, queryStringParameters, body);
+
+        let requestData = Object.assign(this.useCase.createRequest(), pathParameters, queryStringParameters, body);
 
         try {
             await validateOrReject(requestData);
